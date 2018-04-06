@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script type ="text/javascript">
+    //console.log(JSON.stringify(users));
+    </script> -->
+    <title>Document</title>
+</head>
+    <body>
+        Register
+        <form action='users' method='post'>
+            <p>email: <input type = 'text' name ='email'> min length 3</p> 
+            <p>first_name: <input type = 'text' name ='first_name'>min length 1</p>
+            <p>last_name: <input type = 'text' name ='last_name'>min length 1</p>
+            <p>password: <input type = 'text' name ='password'>min length 3</p>
+            <p>password_confirm: <input type = 'text' name ='password_confirm'></p>
+            <p>birthday: <input type = 'date' name ='birthday'></p>
+            <input type='submit' value='Submit'>
+        </form>
+        <hr>
+        Login
+        <form action="login" method="post">
+            <p>email: <input type = 'text' name = 'email'></p>
+            <p>password: <input type = 'text' name = 'password'></p>
+        </form>
+    </body>
+</html>
