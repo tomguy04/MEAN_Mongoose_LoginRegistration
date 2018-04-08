@@ -2,6 +2,10 @@
 var express = require('express');
 // Create an Express App
 var app = express();
+//require session
+var session = require('express-session');
+//use session
+app.use(session({secret: 'codingdojorocks'}));  // string for encryption
 // Require body-parser (to receive post data from clients)
 const validator = require('validator'); 
 var mongoose = require('mongoose');
@@ -49,7 +53,12 @@ UserSchema.pre('save', function(next) {
     );
 })
 
-
+//compare current pw w / hashed pw
+UserSchema.statics.validatePW =  function(pw_from_form, storedHPW){
+    //comparing PWs
+    console.log('comparing PWs');
+    return bCrypt.compare(pw_from_form, storedHPW);
+}
 
 //pre notes
 // myModelSchema.pre('save', function(done){
@@ -89,9 +98,7 @@ app.get('/', function(req, res) {
     res.render('index');
 })
 
-
-
-// Add User Request 
+// Add register Request 
 app.post('/users', function(req, res) {
     console.log("POST DATA", req.body);
    if (req.body.password == req.body.password_confirm){
@@ -110,6 +117,77 @@ app.post('/users', function(req, res) {
     }
 })
     
+
+// user login
+app.post('/users/login', function(request,response){
+    console.log("POST DATA", request.body)
+    User.findOne({'email': request.body.email})
+    .then(userInfo => {
+        if (!userInfo){
+            //console.log('no such user');
+            throw new Error();
+        }
+        console.log(`valid email ${request.body.email}`);
+        bCrypt.compare(request.body.password, userInfo.password)
+        .then((res)=> {
+            if (res){
+                console.log(`I can now log in the user ${res}`);
+                if ('_id' in request.session){
+                   
+                    console.log(`_id is in session, ${request.session._id}`);
+                    
+                    //request.session.user = userInfo;
+                    response.redirect("/welcome");   
+                    //response.redirect('/');
+                }
+                else{
+                    console.log(`_id is in NOT in session`);
+                    request.session._id = userInfo._id;
+                    //request.session.user = userInfo;
+                    response.redirect("/welcome"); 
+                    //response.redirect('/');
+                }
+   
+                
+            }
+            else{
+                console.log(`!!!Invalid email and password, I canNOT log the user in ${res}`);
+                response.redirect('/');
+                //response.render('index', {errorMsg: 'user and pw combo not valid'});
+            }
+        })
+        // console.log(`sending ${req.body.password} and ${userInfo.password}`)
+        // var temp=  User.validatePW(req.body.password, userInfo.password)
+        // console.log (`ran validatePW and ---> ${temp}`);
+        // res.redirect('/');
+        // .then(()=> {
+        //     console.log('valid email and password');
+        // })
+        
+    })
+    .catch((error)=>{
+        console.log(`no such user ${error}` );
+        response.redirect('/');
+        //response.render('/', {errorMsg: 'that user does not exist})
+    })
+})
+
+app.get('/welcome/', function(request,response){
+    //const user = User.find(possibleUser => possibleUser._id === request.session._id)
+    if ('_id' in request.session){
+        console.log(`session at welcome route is ${request.session._id}`);
+        User.findOne({'_id':request.session._id})
+        
+        .then(user => {
+            console.log(JSON.stringify(user));
+            response.render('welcome', {data:user})
+        })
+        
+
+        .catch(()=>{console.log(`can't find user with that id`);})
+    }
+    else{response.redirect('/');}   
+})
 
 // Setting our Server to Listen on Port: 8000
 app.listen(8000, function() {

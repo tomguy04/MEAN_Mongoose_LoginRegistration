@@ -32,8 +32,20 @@ The login form should just have password and email
 -    birthday  - required, at least 1 character
 -     password should match pw confirmation
 
-3. create a login form at the index.
-    email
-    password
+3. Login for the user
+    -3a. create a login form at the index.
+        -email
+        -password
+    -3b. check for the email existence
+    -3c. check if hashed version of the password submitted equals the saved pw (saved pw is hashed)
 
-4. If all validations pass, render a page that says -> Welcome!
+
+4. After (3) passes, render a page that says -> Welcome!
+   - 1. check to see if there is a user in session
+    - 1a. if in session, render page with hello, <%= user.name =>
+     1b. if user not in session, render send back to index.
+
+5. revisit some other details
+    1. eliminate "path" in error.
+    2. display error messages on screen.
+    3. user's registration email should be validated for uniqueness.

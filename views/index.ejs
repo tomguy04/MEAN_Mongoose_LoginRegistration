@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <script type ="text/javascript">
-    //console.log(JSON.stringify(users));
-    </script> -->
     <title>Document</title>
 </head>
     <body>
+        
         Register
         <form action='users' method='post'>
             <p>email: <input type = 'text' name ='email'> min length 3</p> 
@@ -18,13 +16,14 @@
             <p>password: <input type = 'text' name ='password'>min length 3</p>
             <p>password_confirm: <input type = 'text' name ='password_confirm'></p>
             <p>birthday: <input type = 'date' name ='birthday'></p>
-            <input type='submit' value='Submit'>
+            <input type='submit' value='Register'>
         </form>
         <hr>
         Login
-        <form action="login" method="post">
+        <form action="users/login" method="post">
             <p>email: <input type = 'text' name = 'email'></p>
             <p>password: <input type = 'text' name = 'password'></p>
+            <input type='submit' value='Login'>
         </form>
     </body>
 </html>
