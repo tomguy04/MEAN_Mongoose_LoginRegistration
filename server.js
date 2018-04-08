@@ -27,7 +27,8 @@ var UserSchema = new mongoose.Schema({ //Blueprint.  name and age in each docume
                 return validator.isEmail(email);
             },
             message: 'not a valid email'
-        }
+        },
+        unique: true
     },
     first_name: {type: String, required: true, minlength:[1, 'first name is too short must at least 1 chars']},
     last_name: {type: String, required: true, minlength: 1},
@@ -101,21 +102,33 @@ app.get('/', function(req, res) {
 // Add register Request 
 app.post('/users', function(req, res) {
     console.log("POST DATA", req.body);
-   if (req.body.password == req.body.password_confirm){
-        User.create(req.body)
-        .then(user => {
-            console.log (`New user is ${user}`)
-            res.redirect('/');
-        })
-        .catch(err => {
-            console.log(`Error creating user ${err}`)
-            res.redirect('/');
-        })
+    // User.find({'email':req.body.email})
+    // .then( user => {
+    //     console.log(`found ${user}`)
+    //     res.redirect('/');
+    // })
+    // .catch(()=>{
+
+       //console.log(`***************************** ${arr.length}`);
+       //res.redirect('/');
+
+    if (req.body.password == req.body.password_confirm){
+            User.create(req.body)
+            .then(user => {
+                console.log (`New user is ${user}`)
+                res.redirect('/')
+            })
+            .catch(err => {
+                console.log(`Error creating user ${err}`)
+                res.redirect('/')
+            })
+        }
+        else{
+            console.log(`passwords don't match!`)
+        }
+        
     }
-    else{
-        console.log(`passwords don't match!`)
-    }
-})
+)
     
 
 // user login
